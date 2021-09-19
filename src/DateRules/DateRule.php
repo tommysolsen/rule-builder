@@ -13,6 +13,7 @@ abstract class DateRule
         'group' => GroupDateRule::class,
         'dayOfWeek' => DayOfWeekDateRule::class,
         'dateRange' => DateRangeRule::class,
+        'not' => NotDateRule::class
     ];
 
     public string $name;
@@ -28,9 +29,9 @@ abstract class DateRule
         foreach ($nodeData as $key => $value) {
             try {
                 $prop = $r->getProperty($key);
-                if ($prop->hasType() && $prop->getType() == Carbon::class) {
+                if ($prop->hasType() && $prop->getType()->getName() == Carbon::class) {
                     $value = $value ? Carbon::parse($value) : null;
-                } else if($prop->hasType() && $prop->getType() == DateRule::class) {
+                } else if($prop->hasType() && $prop->getType()->getName() == DateRule::class) {
                     $value = $value ? DateRule::parse($value, $rules) : null;
                 }
             } catch (\ReflectionException $e) {
